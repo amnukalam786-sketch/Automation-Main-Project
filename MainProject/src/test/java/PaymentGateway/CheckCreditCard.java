@@ -90,7 +90,7 @@ public void InvalidCreditCard()
 		alert.accept();
 	}
 }
-public void checkCardBalance()
+public void checkingPrice()
 {
   System.out.println ("checking");
 	    js.executeScript("window.scrollTo(0,0)");
