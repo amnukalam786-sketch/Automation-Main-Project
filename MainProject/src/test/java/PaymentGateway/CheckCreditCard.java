@@ -89,18 +89,37 @@ public void InvalidCreditCard()
 		System.out.println("Alefrt is displayed.." +str);
 		alert.accept();
 	}
-
-
-
 }
 public void checkCardBalance()
 {
-	
+  System.out.println ("checking");
+	    js.executeScript("window.scrollTo(0,0)");
+	    wait.until(ExpectedConditions.visibilityOfElementLocated(cart)).click();
+	    popupRemoval();
+	    WebElement qtyElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("quantity")));
+   	    js.executeScript("arguments[0].scrollIntoView(true);",qtyElement );
+        Select drop=new Select(qtyElement);
+	    int quantity= Integer.parseInt(drop.getFirstSelectedOption().getText().replaceAll("[^0-9]",""));    //removes everythng except 0-9
+	    String price= driver.findElement(By.xpath("//*[@id=\"three\"]/div/form/div/div[2]/h3")).getText();
+	    price = price.split("\\.")[0];           // removes .00 part
+     	double priceText= Double.parseDouble(price.replaceAll("[^0-9]",""));          
+    	int expectedAmount=(int)(priceText * quantity);    //typecasting-->narrowing(expilicitly)
+	    WebElement byNow = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@value='Buy Now']")));
+	    js.executeScript("arguments[0].scrollIntoView(true);", byNow);
+	    js.executeScript("arguments[0].click();", byNow);
+
+    WebElement amount= wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"three\"]/div/form/div[1]/div")));	
+    String amounts=amount.getText();
+    double actualAmount= Double.parseDouble(amounts.replaceAll("[^0-9]",""));
+  //compare
+    int actual= (int) actualAmount;       
+   System.out.println("Expected:" +expectedAmount);
+   System.out.println("Acutal:" +actual);
+   Assert.assertEquals(actual, expectedAmount,"Amount Mismatch");
+}	
 
 
 
 }
 
 
-
-}
